@@ -17,7 +17,7 @@ public sealed partial class JukeboxMenu : FancyWindow
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     private AudioSystem _audioSystem;
-
+    private readonly List<(string Name, ProtoId<JukeboxPrototype> Id)> _allSongs = new();
     /// <summary>
     /// Are we currently 'playing' or paused for the play / pause button.
     /// </summary>
@@ -44,12 +44,12 @@ public sealed partial class JukeboxMenu : FancyWindow
 
         MusicList.OnItemSelected += args =>
         {
-            var entry = MusicList[args.ItemIndex];
-
-            if (entry.Metadata is not string juke)
-                return;
-
-            OnSongSelected?.Invoke(juke);
+            var metadata = MusicList[args.ItemIndex].Metadata;
+            Logger.Debug($"Выбрана песня: {metadata}");
+            if (metadata is ProtoId<JukeboxPrototype> songId)
+            {
+                OnSongSelected?.Invoke(songId);
+            }
         };
 
         PlayButton.OnPressed += args =>
@@ -67,6 +67,8 @@ public sealed partial class JukeboxMenu : FancyWindow
         VolumeSlider.MaxValue = 100f; /// ADT-Tweak
 
         SetPlayPauseButton(_audioSystem.IsPlaying(_audio), force: true);
+
+        SearchBar.OnTextChanged += OnSearchTextChanged;
     }
 
     public JukeboxMenu(AudioSystem audioSystem)
@@ -99,12 +101,32 @@ public sealed partial class JukeboxMenu : FancyWindow
     public void Populate(IEnumerable<JukeboxPrototype> jukeboxProtos)
     {
         MusicList.Clear();
+        _allSongs.Clear();
 
         foreach (var entry in jukeboxProtos)
         {
+            var songName = entry.Name;
+            _allSongs.Add((entry.Name, entry.ID));
             MusicList.AddItem(entry.Name, metadata: entry.ID);
         }
         MusicList.SortItemsByText(); /// ADT-Tweak
+    }
+
+    private void OnSearchTextChanged(LineEdit.LineEditEventArgs args)
+    {
+        if (SearchBar == null || MusicList == null)
+            return;
+
+        var filter = SearchBar.Text.Trim().ToLowerInvariant();
+        MusicList.Clear();
+
+        foreach (var (name, id) in _allSongs)
+        {
+            if (string.IsNullOrEmpty(filter) || name.ToLowerInvariant().Contains(filter))
+            {
+                MusicList.AddItem(name, metadata: id);
+            }
+        }
     }
 
     public void SetPlayPauseButton(bool playing, bool force = false)
