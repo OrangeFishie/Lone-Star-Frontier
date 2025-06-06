@@ -7,7 +7,7 @@
         HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="8"/>
         <BoxContainer Orientation="Vertical">
             <Label Name="SongSelected" Text="{Loc 'jukebox-menu-selectedsong'}" />
-            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" 
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True"
                           VerticalExpand="False" SizeFlagsStretchRatio="1"> <!-- ADT-Tweak -->
                 <Label Name="SongName" Text="---" />
                 <Label Name="DurationLabel" Text="00:00 / 00:00" HorizontalAlignment="Right" HorizontalExpand="True"/>
@@ -32,6 +32,7 @@
                           VerticalExpand="False" SizeFlagsStretchRatio="1" HorizontalAlignment="Center">
                 <Button Name="PlayButton" Text="{Loc 'jukebox-menu-buttonplay'}" />
                 <Button Name="StopButton" Text="{Loc 'jukebox-menu-buttonstop'}" />
+            <Button Name="LoopButton" Text="{Loc 'jukebox-menu-buttonloop-off'}" />
             </BoxContainer>
         </BoxContainer>
         <!-- ADT-Tweak end-->

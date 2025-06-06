@@ -36,6 +36,11 @@ public sealed class JukeboxBoundUserInterface : BoundUserInterface
             }
         };
 
+        _menu.OnLoopPressed += () =>
+        {
+            SendMessage(new JukeboxToggleLoopMessage());
+        };
+
         _menu.OnStopPressed += () =>
         {
             SendMessage(new JukeboxStopMessage());
@@ -57,6 +62,7 @@ public sealed class JukeboxBoundUserInterface : BoundUserInterface
             return;
 
         _menu.SetAudioStream(jukebox.AudioStream);
+        _menu.SetLoopButton(jukebox.Loop);
         _menu.SetVolumeSlider(jukebox.Volume); // ADT-Tweak
         if (_protoManager.TryIndex(jukebox.SelectedSongId, out var songProto))
         {

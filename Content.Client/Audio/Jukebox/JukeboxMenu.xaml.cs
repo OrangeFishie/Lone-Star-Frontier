@@ -27,6 +27,7 @@ public sealed partial class JukeboxMenu : FancyWindow
     /// True if playing, false if paused.
     /// </summary>
     public event Action<bool>? OnPlayPressed;
+    public event Action? OnLoopPressed;
     public event Action? OnStopPressed;
     public event Action<ProtoId<JukeboxPrototype>>? OnSongSelected;
     public event Action<float>? SetTime;
@@ -55,6 +56,7 @@ public sealed partial class JukeboxMenu : FancyWindow
         PlayButton.OnPressed += args =>
         {
             OnPlayPressed?.Invoke(!_playState);
+        LoopButton.OnPressed += _ => OnLoopPressed?.Invoke();
         };
 
         StopButton.OnPressed += args =>
@@ -86,14 +88,6 @@ public sealed partial class JukeboxMenu : FancyWindow
         SetTime?.Invoke(PlaybackSlider.Value);
         _lockTimer = 0.5f;
     }
-
-    /// ADT-Tweak start
-    private void VolumeSliderKeyUp(Slider args)
-    {
-        SetVolume?.Invoke(VolumeSlider.Value);
-        _lockTimer = 0.5f;
-    }
-    /// ADT-Tweak end
 
     /// <summary>
     /// Re-populates the list of jukebox prototypes available.
