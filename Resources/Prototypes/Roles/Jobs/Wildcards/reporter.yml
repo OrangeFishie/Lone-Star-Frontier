@@ -19,6 +19,21 @@
     shoes: ClothingShoesColorWhite
     id: ReporterPDA
     ears: ClothingHeadsetService
-  #storage:
-    #back:
-    #- Stuff
+  storage: # DeltaV: Give reporters tape recording equipment
+    back:
+    - TapeRecorder
+    - CassetteTape
+    - CassetteTape
+    - PhotoCameraFilled # CorvaxGoob-PhotoCamera
+    - PhotoAlbum # CorvaxGoob-PhotoCamera
+
+- type: chameleonOutfit
+  id: ReporterChameleonOutfit
+  job: Reporter
+  equipment:
+    head: ClothingHeadHatFedoraGrey
+    eyes: ClothingEyesGlassesCheapSunglasses
+    mask: ClothingMaskBreath
+    outerClothing: ClothingOuterCoatTrench
+    neck: ClothingNeckTieRed
+    gloves: ClothingHandsGlovesFingerless
