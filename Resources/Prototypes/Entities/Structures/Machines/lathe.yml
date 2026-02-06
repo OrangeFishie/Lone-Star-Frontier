@@ -335,6 +335,7 @@
     - CameraBoards
     - MechBoards
     - ShuttleBoards
+    - ReactorCircuitboards # FH edit
     - NFEngineeringBoards # Frontier
     - NFMedicalBoards # Frontier + Shitmed Change
     - NFServiceBoards # Frontier
