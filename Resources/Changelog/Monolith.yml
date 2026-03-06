@@ -17916,3 +17916,12 @@ Entries:
   id: 1974
   time: '2026-03-05T23:58:56.0000000+00:00'
   url: https://github.com/Monolith-Station/Monolith/pull/3319
+- author: Avalon-Proto
+  changes:
+    - type: Tweak
+      message: >-
+        All incendiary ammo has been made to do majority pierce, tiny amount of
+        heat
+  id: 1975
+  time: '2026-03-06T00:45:37.0000000+00:00'
+  url: https://github.com/Monolith-Station/Monolith/pull/3173
