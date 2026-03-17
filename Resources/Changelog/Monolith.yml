@@ -18299,3 +18299,16 @@ Entries:
   id: 2019
   time: '2026-03-17T23:46:06.0000000+00:00'
   url: https://github.com/Monolith-Station/Monolith/pull/3074
+- author: NazrinNya
+  changes:
+    - type: Tweak
+      message: Vanyk and Vespera are no longer infinite.
+    - type: Tweak
+      message: >-
+        Vanyk now uses mags instead of individual missile, Each mag has 30
+        missiles
+    - type: Tweak
+      message: Vespera mag size is tripled.
+  id: 2020
+  time: '2026-03-17T23:48:16.0000000+00:00'
+  url: https://github.com/Monolith-Station/Monolith/pull/3440
