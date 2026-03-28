@@ -3,7 +3,7 @@
   parent: BaseVessel
   name: TSF-SKR Trilobit
   description: No description yet
-  price: 85200 # the plasma and plastitanium tax is real...
+  price: 265200
   category: Medium
   group: Shipyard
   access: Mercenary
@@ -11,8 +11,9 @@
   guidebookPage: Null
   class:
   - Pursuit
+  - Expedition
   engine:
-  - Uranium
+  - Plasma
 
 - type: gameMap
   id: Trilobit

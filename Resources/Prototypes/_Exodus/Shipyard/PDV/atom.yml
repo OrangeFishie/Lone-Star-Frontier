@@ -1,11 +1,11 @@
-#Author: burrkeye on Github, burkia on Discord.
+#Author: Mihich228 on Github, Mihich228 on Discord.
 
 - type: vessel
   id: Atom
   parent: BaseVesselAntag
   name: BT-Y Atom
   description: No description yet
-  price: 67000
+  price: 148000
   category: Small
   group: BlackMarket
   access: Pirate
@@ -15,7 +15,7 @@
   - Pirate
   - Pursuit
   engine:
-  - AME
+  - Plasma
 
 - type: gameMap
   id: Atom
