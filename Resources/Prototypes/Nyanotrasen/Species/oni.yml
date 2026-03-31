@@ -1,7 +1,7 @@
 - type: species
   id: Oni
   name: species-name-oni
-  roundStart: false # Exodus
+  roundStart: true # Exodus
   prototype: MobOni
   dollPrototype: MobOniDummy
   markingLimits: MobOniMarkingLimits

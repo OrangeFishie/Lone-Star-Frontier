@@ -2,7 +2,7 @@
 - type: species
   id: Goblin
   name: species-name-goblin
-  roundStart: false # Exodus
+  roundStart: true # Exodus
   prototype: MobGoblin
   sprites: MobGoblinSprites
   markingLimits: MobGoblinMarkingLimits
