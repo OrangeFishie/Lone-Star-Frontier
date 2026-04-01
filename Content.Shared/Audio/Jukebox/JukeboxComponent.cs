@@ -15,6 +15,9 @@ public sealed partial class JukeboxComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? AudioStream;
 
+    [DataField, AutoNetworkedField]
+    public bool Loop { get; set; } = false;
+
     /// <summary>
     /// RSI state for the jukebox being on.
     /// </summary>
@@ -38,6 +41,15 @@ public sealed partial class JukeboxComponent : Component
 
     [ViewVariables]
     public float SelectAccumulator;
+    /// ADT-Tweak start
+    [ViewVariables, AutoNetworkedField]
+    public float Volume = 50f;
+
+    public float MinVolume = -30f;
+    public float MaxVolume = 0f;
+    public float MinSlider = 0f;
+    public float MaxSlider = 100f;
+    /// ADT-Tweak end
 
     // Frontier: wallmount jukebox
     [DataField]
@@ -66,6 +78,14 @@ public sealed class JukeboxSetTimeMessage(float songTime) : BoundUserInterfaceMe
     public float SongTime { get; } = songTime;
 }
 
+/// ADT-Tweak start
+[Serializable, NetSerializable]
+public sealed class JukeboxSetVolumeMessage(float volume) : BoundUserInterfaceMessage
+{
+    public float Volume { get; } = volume;
+}
+/// ADT-Tweak end
+
 [Serializable, NetSerializable]
 public enum JukeboxVisuals : byte
 {
@@ -79,6 +99,9 @@ public enum JukeboxVisualState : byte
     Off,
     Select,
 }
+
+[Serializable, NetSerializable]
+public sealed class JukeboxToggleLoopMessage : BoundUserInterfaceMessage;
 
 public enum JukeboxVisualLayers : byte
 {
