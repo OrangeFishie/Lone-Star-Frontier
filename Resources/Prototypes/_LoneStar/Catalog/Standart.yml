@@ -1,0 +1,68 @@
+- type: jukebox
+  id: BFBatWings
+  name: Bondage Fairies - Bat Wings
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-BatWings.ogg
+
+- type: jukebox
+  id: BFClone
+  name: Bondage Fairies - Clone
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-Clone.ogg
+
+- type: jukebox
+  id: BFCDorTar
+  name: Bondage Fairies - Dor Tar
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-DorTar.ogg
+
+- type: jukebox
+  id: BF1-0
+  name: Bondage Fairies - 1-0
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-1-0.ogg
+
+- type: jukebox
+  id: BFBlameItOnArt
+  name: Bondage Fairies - Blame It On Art
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-BlameItOnArt.ogg
+
+- type: jukebox
+  id: BFExpectations
+  name: Bondage Fairies - Expectations
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-Expectations.ogg
+
+- type: jukebox
+  id: BFMorphine
+  name: Bondage Fairies - Morphine
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-Morphine.ogg
+
+- type: jukebox
+  id: BFNV4dll
+  name: Bondage Fairies - NV4dll
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-NV4dll.ogg
+
+- type: jukebox
+  id: BFShockedButNotSurprised
+  name: Bondage Fairies - Shocked But Not Surprised
+  path:
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-ShockedButNotSurprised.ogg
+
+- type: jukebox
+  id: BFTsunamiSurfers
+  name: Bondage Fairies - Tsunami Surfers
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-TsunamiSurfers.ogg
+
+- type: jukebox
+  id: BFTwentiTwelve
+  name: Bondage Fairies - Twenty Twelve
+    path: /Audio/_LoneStar/Jukebox/BondageFairies-TwentyTwelve.ogg
+
+- type: jukebox
+  id: MotherAnarhiMusic
+  name: Мама - Анархия сынов своих любит
+    path: "/Audio/_LoneStar/Jukebox/Анархия - мама сынов своих любит.ogg"
