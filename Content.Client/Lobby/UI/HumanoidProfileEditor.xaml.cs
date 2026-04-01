@@ -362,6 +362,34 @@ namespace Content.Client.Lobby.UI
 
             #endregion SpawnPriority
 
+            #region Height
+
+            HeightSlider.OnValueChanged += args =>
+            {
+                SetHeight((float)args.Value);
+            };
+
+            HeightResetButton.OnPressed += _ =>
+            {
+                ResetHeight();
+            };
+
+            #endregion Height
+
+            #region Width
+
+            WidthSlider.OnValueChanged += args =>
+            {
+                SetWidth((float)args.Value);
+            };
+
+            WidthResetButton.OnPressed += _ =>
+            {
+                ResetWidth();
+            };
+
+            #endregion Width
+
             #region Eyes
 
             EyeColorPicker.OnEyeColorPicked += newColor =>
@@ -1161,6 +1189,8 @@ namespace Content.Client.Lobby.UI
             UpdateGenderControls();
             UpdateSkinColor();
             UpdateSpawnPriorityControls();
+            UpdateHeightControls();
+            UpdateWidthControls();
             UpdateAgeEdit();
             UpdateEyePickers();
             UpdateSaveButton();
@@ -1700,6 +1730,34 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        private void SetHeight(float newHeight)
+        {
+            Profile = Profile?.WithCharacterAppearance(Profile.Appearance.WithHeight(newHeight));
+            SetDirty();
+            ReloadPreview();
+            UpdateHeightValueLabel();
+        }
+
+        private void ResetHeight()
+        {
+            SetHeight(1.0f);
+            UpdateHeightControls();
+        }
+
+        private void SetWidth(float newWidth)
+        {
+            Profile = Profile?.WithCharacterAppearance(Profile.Appearance.WithWidth(newWidth));
+            SetDirty();
+            ReloadPreview();
+            UpdateWidthValueLabel();
+        }
+
+        private void ResetWidth()
+        {
+            SetWidth(1.0f);
+            UpdateWidthControls();
+        }
+
         public bool IsDirty
         {
             get => _isDirty;
@@ -1914,6 +1972,56 @@ namespace Content.Client.Lobby.UI
             }
 
             SpawnPriorityButton.SelectId((int) Profile.SpawnPriority);
+        }
+
+        private void UpdateHeightControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            HeightSlider.Value = Profile.Appearance.Height;
+            UpdateHeightValueLabel();
+        }
+
+        private void UpdateWidthControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            WidthSlider.Value = Profile.Appearance.Width;
+            UpdateWidthValueLabel();
+        }
+
+        private void UpdateHeightValueLabel()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // Base height is approximately 170cm (average human height)
+            // Height multiplier ranges from 0.8 to 1.2
+            const float baseHeightCm = 170f;
+            var heightCm = (int)Math.Round(baseHeightCm * Profile.Appearance.Height);
+            HeightLabel.Text = Loc.GetString("humanoid-profile-editor-height-label", ("height", heightCm));
+        }
+
+        private void UpdateWidthValueLabel()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // Base width is approximately 50cm (average human shoulder width)
+            // Width multiplier ranges from 0.8 to 1.2
+            const float baseWidthCm = 50f;
+            var widthCm = (int)Math.Round(baseWidthCm * Profile.Appearance.Width);
+            WidthLabel.Text = Loc.GetString("humanoid-profile-editor-width-label", ("width", widthCm));
         }
 
         private void UpdateHairPickers()
