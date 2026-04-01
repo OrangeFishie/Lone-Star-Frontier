@@ -69,13 +69,13 @@ humanoid-profile-editor-clear-all-traits-button = Сбросить все чер
 trait-category-physical = Физические
 expand-all-trait-button = Показать все
 collapse-all-trait-button = Скрыть
-humanoid-profile-editor-width-label = Ширина:
+humanoid-profile-editor-width-label = Ширина: { $width } см
 
 # Mono End
 
 humanoid-profile-editor-traits-default-category = Без категории
 humanoid-profile-editor-clear-all-traits-confirm = Подтвердить сброс
-humanoid-profile-editor-height-label = Рост:
+humanoid-profile-editor-height-label = Рост: { $height } см
 humanoid-profile-editor-company-tab = Компания
 humanoid-profile-editor-company-label = Компания:
 humanoid-profile-editor-company-none = Нет

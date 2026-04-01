@@ -1735,6 +1735,7 @@ namespace Content.Client.Lobby.UI
             Profile = Profile?.WithCharacterAppearance(Profile.Appearance.WithHeight(newHeight));
             SetDirty();
             ReloadPreview();
+            UpdateHeightValueLabel();
         }
 
         private void ResetHeight()
@@ -1748,6 +1749,7 @@ namespace Content.Client.Lobby.UI
             Profile = Profile?.WithCharacterAppearance(Profile.Appearance.WithWidth(newWidth));
             SetDirty();
             ReloadPreview();
+            UpdateWidthValueLabel();
         }
 
         private void ResetWidth()
@@ -1980,6 +1982,7 @@ namespace Content.Client.Lobby.UI
             }
 
             HeightSlider.Value = Profile.Appearance.Height;
+            UpdateHeightValueLabel();
         }
 
         private void UpdateWidthControls()
@@ -1990,6 +1993,35 @@ namespace Content.Client.Lobby.UI
             }
 
             WidthSlider.Value = Profile.Appearance.Width;
+            UpdateWidthValueLabel();
+        }
+
+        private void UpdateHeightValueLabel()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // Base height is approximately 170cm (average human height)
+            // Height multiplier ranges from 0.8 to 1.2
+            const float baseHeightCm = 170f;
+            var heightCm = (int)Math.Round(baseHeightCm * Profile.Appearance.Height);
+            HeightLabel.Text = Loc.GetString("humanoid-profile-editor-height-label", ("height", heightCm));
+        }
+
+        private void UpdateWidthValueLabel()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // Base width is approximately 50cm (average human shoulder width)
+            // Width multiplier ranges from 0.8 to 1.2
+            const float baseWidthCm = 50f;
+            var widthCm = (int)Math.Round(baseWidthCm * Profile.Appearance.Width);
+            WidthLabel.Text = Loc.GetString("humanoid-profile-editor-width-label", ("width", widthCm));
         }
 
         private void UpdateHairPickers()
