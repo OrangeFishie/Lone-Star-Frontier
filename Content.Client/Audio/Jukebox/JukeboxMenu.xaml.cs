@@ -101,16 +101,15 @@ public sealed partial class JukeboxMenu : FancyWindow
     /// </summary>
     public void Populate(IEnumerable<JukeboxPrototype> jukeboxProtos)
     {
-        MusicList.Clear();
         _allSongs.Clear();
 
         foreach (var entry in jukeboxProtos)
         {
-            var songName = entry.Name;
             _allSongs.Add((entry.Name, entry.ID));
-            MusicList.AddItem(entry.Name, metadata: entry.ID);
         }
-        MusicList.SortItemsByText(); /// ADT-Tweak
+
+        // Обновляем MusicList через OnSearchTextChanged для корректного отображения
+        OnSearchTextChanged(new LineEdit.LineEditEventArgs(SearchBar, SearchBar.Text));
     }
 
     private void OnSearchTextChanged(LineEdit.LineEditEventArgs args)
@@ -128,6 +127,9 @@ public sealed partial class JukeboxMenu : FancyWindow
                 MusicList.AddItem(name, metadata: id);
             }
         }
+
+        // Сортируем элементы по тексту
+        MusicList.SortItemsByText();
     }
 
     public void SetPlayPauseButton(bool playing, bool force = false)

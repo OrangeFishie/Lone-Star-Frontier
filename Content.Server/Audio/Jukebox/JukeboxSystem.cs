@@ -18,6 +18,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
 
     public override void Initialize()
     {
@@ -68,7 +69,9 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
                 Volume = 1f
             };
 
-            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, AudioParams.Default.WithMaxDistance(10f))?.Entity;
+            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, audioParams)?.Entity;
+            // Сбрасываем LastPlaybackPosition при запуске новой песни
+            component.LastPlaybackPosition = 0f;
             Dirty(uid, component);
         }
     }
@@ -183,6 +186,8 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
             };
 
             component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, audioParams)?.Entity;
+            // Сбрасываем LastPlaybackPosition при смене песни
+            component.LastPlaybackPosition = 0f;
             Dirty(uid, component);
         }
 
@@ -205,6 +210,40 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
                     comp.Selecting = false;
 
                     TryUpdateVisualState(uid, comp);
+                }
+            }
+
+            // Обработка окончания песни в зависимости от режима цикла
+            if (comp.SelectedSongId.HasValue && comp.AudioStream.HasValue)
+            {
+                if (TryComp(comp.AudioStream, out AudioComponent? audioComp))
+                {
+                    var audioLength = _audioSystem.GetAudioLength(audioComp.FileName).TotalSeconds;
+                    float currentPosition = audioComp.PlaybackPosition;
+
+                    // Определяем, закончилась ли песня:
+                    // 1. Предыдущая позиция была близка к концу
+                    // 2. Текущая позиция сбросилась near 0 (песня началась заново)
+                    bool songJustEnded = comp.LastPlaybackPosition >= audioLength - 0.5f &&
+                                         currentPosition < 0.5f &&
+                                         currentPosition < comp.LastPlaybackPosition;
+
+                    // Обновляем последнюю позицию
+                    comp.LastPlaybackPosition = currentPosition;
+
+                    if (songJustEnded)
+                    {
+                        if (comp.Loop)
+                        {
+                            // Режим цикла: песня уже перезапустилась сама (AudioParams.Loop работает),
+                            // ничего делать не нужно
+                        }
+                        else
+                        {
+                            // Режим без цикла: останавливаем песню
+                            Audio.SetState(comp.AudioStream, AudioState.Stopped);
+                        }
+                    }
                 }
             }
         }
