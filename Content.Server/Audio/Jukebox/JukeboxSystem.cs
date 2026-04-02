@@ -167,17 +167,23 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
 
     private void OnJukeboxSelected(EntityUid uid, JukeboxComponent component, JukeboxSelectedMessage args)
     {
-        bool isPlaying = component.AudioStream != null &&
-                         Exists(component.AudioStream.Value) &&
-                         HasComp<MetaDataComponent>(component.AudioStream.Value) &&
-                         Audio.IsPlaying(component.AudioStream);
+        component.SelectedSongId = args.SongId;
+        DirectSetVisualState(uid, JukeboxVisualState.Select);
+        component.Selecting = true;
+        component.AudioStream = Audio.Stop(component.AudioStream);
 
-        if (!isPlaying)
+        // Автоматически запускаем новую песню
+        if (_protoManager.TryIndex(args.SongId, out var jukeboxProto))
         {
-            component.SelectedSongId = args.SongId;
-            DirectSetVisualState(uid, JukeboxVisualState.Select);
-            component.Selecting = true;
-            component.AudioStream = Audio.Stop(component.AudioStream);
+            var audioParams = new AudioParams
+            {
+                MaxDistance = 10f,
+                Loop = component.Loop,
+                Volume = SharedJukeboxSystem.MapToRange(component.Volume, component.MinSlider, component.MaxSlider, component.MinVolume, component.MaxVolume)
+            };
+
+            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, audioParams)?.Entity;
+            Dirty(uid, component);
         }
 
         Dirty(uid, component);
