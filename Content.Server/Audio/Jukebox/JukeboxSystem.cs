@@ -18,6 +18,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
 
     public override void Initialize()
     {
@@ -68,7 +69,9 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
                 Volume = 1f
             };
 
-            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, AudioParams.Default.WithMaxDistance(10f))?.Entity;
+            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, audioParams)?.Entity;
+            // Сбрасываем LastPlaybackPosition при запуске новой песни
+            component.LastPlaybackPosition = 0f;
             Dirty(uid, component);
         }
     }
@@ -167,17 +170,25 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
 
     private void OnJukeboxSelected(EntityUid uid, JukeboxComponent component, JukeboxSelectedMessage args)
     {
-        bool isPlaying = component.AudioStream != null &&
-                         Exists(component.AudioStream.Value) &&
-                         HasComp<MetaDataComponent>(component.AudioStream.Value) &&
-                         Audio.IsPlaying(component.AudioStream);
+        component.SelectedSongId = args.SongId;
+        DirectSetVisualState(uid, JukeboxVisualState.Select);
+        component.Selecting = true;
+        component.AudioStream = Audio.Stop(component.AudioStream);
 
-        if (!isPlaying)
+        // Автоматически запускаем новую песню
+        if (_protoManager.TryIndex(args.SongId, out var jukeboxProto))
         {
-            component.SelectedSongId = args.SongId;
-            DirectSetVisualState(uid, JukeboxVisualState.Select);
-            component.Selecting = true;
-            component.AudioStream = Audio.Stop(component.AudioStream);
+            var audioParams = new AudioParams
+            {
+                MaxDistance = 10f,
+                Loop = component.Loop,
+                Volume = SharedJukeboxSystem.MapToRange(component.Volume, component.MinSlider, component.MaxSlider, component.MinVolume, component.MaxVolume)
+            };
+
+            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, audioParams)?.Entity;
+            // Сбрасываем LastPlaybackPosition при смене песни
+            component.LastPlaybackPosition = 0f;
+            Dirty(uid, component);
         }
 
         Dirty(uid, component);
@@ -199,6 +210,40 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
                     comp.Selecting = false;
 
                     TryUpdateVisualState(uid, comp);
+                }
+            }
+
+            // Обработка окончания песни в зависимости от режима цикла
+            if (comp.SelectedSongId.HasValue && comp.AudioStream.HasValue)
+            {
+                if (TryComp(comp.AudioStream, out AudioComponent? audioComp))
+                {
+                    var audioLength = _audioSystem.GetAudioLength(audioComp.FileName).TotalSeconds;
+                    float currentPosition = audioComp.PlaybackPosition;
+
+                    // Определяем, закончилась ли песня:
+                    // 1. Предыдущая позиция была близка к концу
+                    // 2. Текущая позиция сбросилась near 0 (песня началась заново)
+                    bool songJustEnded = comp.LastPlaybackPosition >= audioLength - 0.5f &&
+                                         currentPosition < 0.5f &&
+                                         currentPosition < comp.LastPlaybackPosition;
+
+                    // Обновляем последнюю позицию
+                    comp.LastPlaybackPosition = currentPosition;
+
+                    if (songJustEnded)
+                    {
+                        if (comp.Loop)
+                        {
+                            // Режим цикла: песня уже перезапустилась сама (AudioParams.Loop работает),
+                            // ничего делать не нужно
+                        }
+                        else
+                        {
+                            // Режим без цикла: останавливаем песню
+                            Audio.SetState(comp.AudioStream, AudioState.Stopped);
+                        }
+                    }
                 }
             }
         }

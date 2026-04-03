@@ -55,6 +55,12 @@ public sealed partial class JukeboxComponent : Component
     [DataField]
     public Vector2 AudioOffset = Vector2.Zero;
     // End Frontier
+
+    /// <summary>
+    /// Tracks the previous playback position to detect song end (when position resets to 0).
+    /// </summary>
+    [ViewVariables]
+    public float LastPlaybackPosition;
 }
 
 [Serializable, NetSerializable]
