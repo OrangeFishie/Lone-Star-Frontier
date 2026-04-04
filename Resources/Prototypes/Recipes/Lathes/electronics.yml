@@ -628,3 +628,18 @@
   parent: BaseCircuitboardRecipe
   id: CrystallizerMachineCircuitboard
   result: CrystallizerMachineCircuitboard
+
+# Engineering recipe categories (for Far Horizons)
+- type: latheRecipe
+  abstract: true
+  parent: BaseCircuitboardRecipe
+  id: BaseEngineeringComputerRecipeCategory
+  categories:
+  - Electronics
+
+- type: latheRecipe
+  abstract: true
+  parent: BaseCircuitboardRecipe
+  id: BaseEngineeringMachineRecipeCategory
+  categories:
+  - Electronics

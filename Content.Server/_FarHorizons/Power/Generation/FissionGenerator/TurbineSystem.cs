@@ -22,6 +22,7 @@ using Content.Shared.DeviceNetwork;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Server.Audio;
 using Content.Shared.Audio;

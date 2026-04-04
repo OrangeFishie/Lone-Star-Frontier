@@ -33,6 +33,7 @@ using Content.Shared.DeviceNetwork;
 using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Throwing;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Timing;

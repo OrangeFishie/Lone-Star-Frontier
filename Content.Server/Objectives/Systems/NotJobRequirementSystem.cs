@@ -25,7 +25,20 @@ public sealed class NotJobRequirementSystem : EntitySystem
         _jobs.MindTryGetJob(args.MindId, out var proto);
 
         // if player has no job then don't care
-        if (proto is not null && proto.ID == comp.Job)
+        if (proto is null)
+            return;
+
+        // Check single job
+        if (proto.ID == comp.Job)
+        {
             args.Cancelled = true;
+            return;
+        }
+
+        // Check job list
+        if (comp.Jobs.Contains(proto.ID))
+        {
+            args.Cancelled = true;
+        }
     }
 }

@@ -6,6 +6,7 @@ using Content.Shared._FarHorizons.Materials.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Nutrition;
 using Content.Shared.Radiation.Components;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Robust.Shared.Prototypes;
 
@@ -60,7 +61,7 @@ public sealed class ReactorPartSystem : SharedReactorPartSystem
         base.Initialize();
         SubscribeLocalEvent<ReactorPartComponent, MapInitEvent>(OnInit);
         SubscribeLocalEvent<ReactorPartComponent, ExaminedEvent>(OnExamine);
-        SubscribeLocalEvent<ReactorPartComponent, IngestedEvent>(OnIngest);
+        SubscribeLocalEvent<ReactorPartComponent, AfterFullyEatenEvent>(OnIngest);
     }
 
     private void OnInit(EntityUid uid, ReactorPartComponent component, ref MapInitEvent args)
@@ -140,7 +141,7 @@ public sealed class ReactorPartSystem : SharedReactorPartSystem
         }
     }
 
-    private void OnIngest(Entity<ReactorPartComponent> ent, ref IngestedEvent args)
+    private void OnIngest(Entity<ReactorPartComponent> ent, ref AfterFullyEatenEvent args)
     {
         var comp = ent.Comp;
         if (comp.Properties == null)
@@ -148,7 +149,7 @@ public sealed class ReactorPartSystem : SharedReactorPartSystem
 
         var properties = comp.Properties;
 
-        if (!_entityManager.TryGetComponent<DamageableComponent>(args.Target, out var damageable) || damageable.Damage.DamageDict == null)
+        if (!_entityManager.TryGetComponent<DamageableComponent>(args.User, out var damageable) || damageable.Damage.DamageDict == null)
             return;
 
         var dict = damageable.Damage.DamageDict;

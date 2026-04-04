@@ -175,23 +175,10 @@
         amount: 2
       - id: GeigerCounter
         amount: 2
+      - id: RadiationBlockingProjector
+      - id: PillCanisterPotassiumIodide
+        prob: 0.75
       - id: MedkitRadiationFilled #Mono
-  - type: EntityTableContainerFill
-    containers:
-      entity_storage: !type:NestedSelector
-        tableId: FillRadiationSuit
-
-- type: entityTable
-  id: FillRadiationSuit
-  table: !type:AllSelector
-    children:
-    - id: ClothingOuterSuitRad
-      amount: 2
-    - id: GeigerCounter
-      amount: 2
-    - id: RadiationBlockingProjector # Far Horizons
-    - id: PillCanisterPotassiumIodide # Far Horizons
-      prob: 0.75
 
 - type: entity
   parent: LockerEvacRepair
@@ -220,6 +207,8 @@
     - id: BoxInflatable
     - id: HolofanProjector
     - id: MetalFoamGrenade
-      amount: 3
+      amount: !type:ConstantNumberSelector
+        value: 3
     - id: AirGrenade
-      amount: 3
+      amount: !type:ConstantNumberSelector
+        value: 3

@@ -1,6 +1,7 @@
 ﻿using Content.Shared.Administration.Logs;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Electrocution;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -186,7 +187,7 @@ public abstract class SharedTurbineSystem : EntitySystem
         if (!_entityManager.TryGetComponent<DamageableComponent>(uid, out var damageableComponent))
             return;
 
-        _damageableSystem.SetAllDamage((uid, damageableComponent), 0);
+        _damageableSystem.SetAllDamage(uid, damageableComponent, FixedPoint2.Zero);
     }
 
     protected void UpdateHealthIndicators(EntityUid uid, TurbineComponent comp)

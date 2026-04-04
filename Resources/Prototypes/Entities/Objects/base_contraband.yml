@@ -33,15 +33,15 @@
 #   - type: Contraband
 #     severity: Major
 
-# # base department restricted contraband, this should only be used as a parent for other contraband prototypes, not the restricted items themselves.
-# - type: entity
-#   id: BaseRestrictedContraband
-#   abstract: true
-#   components:
-#   - type: Contraband
-#     severity: Restricted
-#     allowedDepartments: [  ]
-#     allowedJobs: [  ]
+# base department restricted contraband, this should only be used as a parent for other contraband prototypes, not the restricted items themselves.
+- type: entity
+  id: BaseRestrictedContraband
+  abstract: true
+  components:
+  - type: Contraband
+    severity: Restricted
+    allowedDepartments: [  ]
+    allowedJobs: [  ]
 
 # one department restricted contraband
 - type: entity
@@ -68,13 +68,13 @@
 #   - type: Contraband
 #     allowedDepartments: [ Security ]
 
-# - type: entity
-#   id: BaseEngineeringContraband
-#   parent: BaseRestrictedContraband
-#   abstract: true
-#   components:
-#   - type: Contraband
-#     allowedDepartments: [ Engineering ]
+- type: entity
+  id: BaseEngineeringContraband
+  parent: BaseRestrictedContraband
+  abstract: true
+  components:
+  - type: Contraband
+    allowedDepartments: [ Engineering ]
 
 # - type: entity
 #   id: BaseScienceContraband

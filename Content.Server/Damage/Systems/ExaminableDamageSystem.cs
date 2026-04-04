@@ -45,7 +45,7 @@ public sealed class ExaminableDamageSystem : EntitySystem
     private int GetDamageLevel(EntityUid uid, ExaminableDamageComponent? component = null,
         DamageableComponent? damageable = null, DestructibleComponent? destructible = null)
     {
-        if (!Resolve(uid, ref component, ref damageable, ref destructible))
+        if (!Resolve(uid, ref component, ref damageable, ref destructible, false))
             return 0;
 
         if (component.MessagesProto == null)

@@ -10,6 +10,13 @@ public sealed partial class EntSelector : EntityTableSelector
 {
     public const string IdDataFieldTag = "id";
 
+    /// <summary>
+    /// Required for serialization.
+    /// </summary>
+    public EntSelector()
+    {
+    }
+
     [DataField(IdDataFieldTag, required: true)]
     public EntProtoId Id;
 
