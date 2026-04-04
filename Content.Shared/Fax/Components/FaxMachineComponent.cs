@@ -206,7 +206,7 @@ public sealed partial class FaxPrintout
     {
     }
 
-    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false, EntityUid? entityUid = null) // CorvaxGoob-PhotoCamera
+    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false,bool stampProtected = false, EntityUid? entityUid = null) // CorvaxGoob-PhotoCamera
     {
         Content = content;
         Name = name;

@@ -485,7 +485,6 @@ public sealed class FaxSystem : EntitySystem
         if (sendEntity == null)
             return;
 
-        // CorvaxGoob-PhotoCamera-Start
         if (!TryComp(sendEntity, out MetaDataComponent? metadata))
             return;
 
@@ -493,30 +492,31 @@ public sealed class FaxSystem : EntitySystem
         TryComp<NameModifierComponent>(sendEntity, out var nameMod);
 
         FaxPrintout? printout = null;
+        PaperComponent? paper = null;
 
-        if (TryComp<PaperComponent>(sendEntity, out var paper))
+        if (TryComp<PaperComponent>(sendEntity, out paper))
         {
+            // TODO: See comment in 'Send()' about not being able to copy whole entities
             printout = new FaxPrintout(paper.Content,
-                                           nameMod?.BaseName ?? metadata.EntityName,
-                                           labelComponent?.CurrentLabel,
-                                           metadata.EntityPrototype?.ID ?? component.PrintPaperId,
-                                           paper.StampState,
-                                           paper.StampedBy,
-                                           paper.EditingDisabled,
+                                       nameMod?.BaseName ?? metadata.EntityName,
+                                       labelComponent?.CurrentLabel,
+                                       metadata.EntityPrototype?.ID ?? component.PrintPaperId,
+                                       paper.StampState,
+                                       paper.StampedBy,
+                                       paper.EditingDisabled,
                                        _tag.HasTag(sendEntity.Value, "NFPaperStampProtected")); // Frontier: add stamp protection
         }
-        else if (TryComp<PhotoCardComponent>(sendEntity, out var photo) )
+        else if (TryComp<PhotoCardComponent>(sendEntity, out var photo))
         {
-            var meta = MetaData(sendEntity.Value);
+            var photoMeta = MetaData(sendEntity.Value);
 
-            if (meta.EntityPrototype is not null)
-                printout = new FaxPrintout("", meta.EntityName, prototypeId: meta.EntityPrototype.ID, entityUid: sendEntity);
+            if (photoMeta.EntityPrototype is not null)
+                printout = new FaxPrintout("", photoMeta.EntityName, prototypeId: photoMeta.EntityPrototype.ID, entityUid: sendEntity);
         }
         // TODO: See comment in 'Send()' about not being able to copy whole entities
 
         if (printout is null)
             return;
-        // CorvaxGoob-PhotoCamera-End
 
         component.PrintingQueue.Enqueue(printout);
         component.SendTimeoutRemaining += component.SendTimeout;
@@ -525,7 +525,7 @@ public sealed class FaxSystem : EntitySystem
         // will start immediately.
 
         // Frontier: check if paper should be destroyed on sending.
-        if (paper.DestroyOnFax)
+        if (paper?.DestroyOnFax == true)
         {
             DeleteFax(uid, sendEntity.Value, paper);
         }
