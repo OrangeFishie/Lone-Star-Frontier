@@ -1,3 +1,4 @@
+using Content.Server._CorvaxGoob.Photo;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -484,15 +485,19 @@ public sealed class FaxSystem : EntitySystem
         if (sendEntity == null)
             return;
 
-        if (!TryComp(sendEntity, out MetaDataComponent? metadata) ||
-            !TryComp<PaperComponent>(sendEntity, out var paper))
+        if (!TryComp(sendEntity, out MetaDataComponent? metadata))
             return;
 
         TryComp<LabelComponent>(sendEntity, out var labelComponent);
         TryComp<NameModifierComponent>(sendEntity, out var nameMod);
 
-        // TODO: See comment in 'Send()' about not being able to copy whole entities
-        var printout = new FaxPrintout(paper.Content,
+        FaxPrintout? printout = null;
+        PaperComponent? paper = null;
+
+        if (TryComp<PaperComponent>(sendEntity, out paper))
+        {
+            // TODO: See comment in 'Send()' about not being able to copy whole entities
+            printout = new FaxPrintout(paper.Content,
                                        nameMod?.BaseName ?? metadata.EntityName,
                                        labelComponent?.CurrentLabel,
                                        metadata.EntityPrototype?.ID ?? component.PrintPaperId,
@@ -500,6 +505,18 @@ public sealed class FaxSystem : EntitySystem
                                        paper.StampedBy,
                                        paper.EditingDisabled,
                                        _tag.HasTag(sendEntity.Value, "NFPaperStampProtected")); // Frontier: add stamp protection
+        }
+        else if (TryComp<PhotoCardComponent>(sendEntity, out var photo))
+        {
+            var photoMeta = MetaData(sendEntity.Value);
+
+            if (photoMeta.EntityPrototype is not null)
+                printout = new FaxPrintout("", photoMeta.EntityName, prototypeId: photoMeta.EntityPrototype.ID, entityUid: sendEntity);
+        }
+        // TODO: See comment in 'Send()' about not being able to copy whole entities
+
+        if (printout is null)
+            return;
 
         component.PrintingQueue.Enqueue(printout);
         component.SendTimeoutRemaining += component.SendTimeout;
@@ -508,7 +525,7 @@ public sealed class FaxSystem : EntitySystem
         // will start immediately.
 
         // Frontier: check if paper should be destroyed on sending.
-        if (paper.DestroyOnFax)
+        if (paper?.DestroyOnFax == true)
         {
             DeleteFax(uid, sendEntity.Value, paper);
         }
@@ -659,6 +676,8 @@ public sealed class FaxSystem : EntitySystem
             }
             // End Frontier
         }
+        else if (printout.EntityUid.HasValue && TryComp<PhotoCardComponent>(printout.EntityUid, out var photo)) // CorvaxGoob-PhotoCamera
+            EnsureComp<PhotoCardComponent>(printed).ImageData = photo.ImageData;
 
         _metaData.SetEntityName(printed, printout.Name);
 

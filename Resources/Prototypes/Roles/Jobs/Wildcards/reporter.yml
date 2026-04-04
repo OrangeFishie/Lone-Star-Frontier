@@ -19,6 +19,10 @@
     shoes: ClothingShoesColorWhite
     id: ReporterPDA
     ears: ClothingHeadsetService
-  #storage:
-    #back:
-    #- Stuff
+  storage: # DeltaV: Give reporters tape recording equipment
+    back:
+    - TapeRecorder
+    - CassetteTape
+    - CassetteTape
+    - PhotoCameraFilled # CorvaxGoob-PhotoCamera
+    - PhotoAlbum # CorvaxGoob-PhotoCamera

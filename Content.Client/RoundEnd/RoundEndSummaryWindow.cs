@@ -2,9 +2,13 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Message;
 using Content.Shared.GameTicking;
+using Content.Shared.Mobs;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Utility;
+using System.Linq;
+using System.Numerics;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 // Goob Station - End of Round Screen
 using Content.Client.Stylesheets;
@@ -12,17 +16,19 @@ using Content.Shared.Mobs;
 
 namespace Content.Client.RoundEnd
 {
-    public sealed class RoundEndSummaryWindow : DefaultWindow
+    public sealed partial class RoundEndSummaryWindow : DefaultWindow // CorvaxGoob-PhotoCamera : made it partial
     {
+        private readonly IFileDialogManager _fileDialogManager; // CorvaxGoob-PhotoCamera
         private readonly IEntityManager _entityManager;
         public int RoundId;
 
         public RoundEndSummaryWindow(string gm, string roundEnd, TimeSpan roundTimeSpan, int roundId,
-            RoundEndMessageEvent.RoundEndPlayerInfo[] info, IEntityManager entityManager)
+            RoundEndMessageEvent.RoundEndPlayerInfo[] info, IEntityManager entityManager, IFileDialogManager fileDialogManager) // CorvaxGoob-PhotoCamera
         {
             _entityManager = entityManager;
+            _fileDialogManager = fileDialogManager; // CorvaxGoob-PhotoCamera
 
-            MinSize = SetSize = new Vector2(520, 580);
+            MinSize = SetSize = new Vector2(610, 580); // CorvaxGoob-PhotoCamera : size changes
 
             Title = Loc.GetString("round-end-summary-window-title");
 
@@ -36,6 +42,11 @@ namespace Content.Client.RoundEnd
             var roundEndTabs = new TabContainer();
             roundEndTabs.AddChild(MakeRoundEndSummaryTab(gm, roundEnd, roundTimeSpan, roundId));
             roundEndTabs.AddChild(MakePlayerManifestTab(info));
+
+            // CorvaxGoob-PhotoCamera
+            var photoTab = MakePhotoReportTab();
+            if (photoTab is not null)
+                roundEndTabs.AddChild(photoTab);
 
             Contents.AddChild(roundEndTabs);
 
@@ -322,5 +333,4 @@ namespace Content.Client.RoundEnd
         }
         #endregion
     }
-
 }

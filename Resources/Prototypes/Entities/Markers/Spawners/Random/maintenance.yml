@@ -159,6 +159,7 @@
     - !type:GroupSelector
       weight: 2
       children:
+      - id: PhotoCameraFilled # CorvaxGoob-PhotoCamera
       - id: Skub
       - id: PonderingOrb
       - id: CluwneHorn
