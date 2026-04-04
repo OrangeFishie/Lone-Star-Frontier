@@ -481,3 +481,26 @@
     stateBaseClosed: hop
     stateDoorOpen: hop_open
     stateDoorClosed: representative_door
+
+# Evacuation Repair Lockers
+- type: entity
+  id: LockerEvacRepair
+  name: evacuation repair locker
+  parent: LockerBase
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: engineering
+    stateDoorOpen: engineering_open
+    stateDoorClosed: engineering_door
+
+- type: entity
+  id: LockerWallEvacRepair
+  name: wall evacuation repair locker
+  parent: LockerBase
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: engineering
+    stateDoorOpen: engineering_open
+    stateDoorClosed: engineering_door
